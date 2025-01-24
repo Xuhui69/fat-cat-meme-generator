@@ -1,4 +1,8 @@
-# Coze API 测试工具
+# 添加远程仓库（替换 [你的GitHub用户名] 为你的实际用户名）
+git remote add origin https://github.com/[你的GitHub用户名]/fat-cat-meme-generator.git
+
+# 推送代码到 GitHub
+git push -u origin master# Coze API 测试工具
 
 这是一个简单的网页工具，用于测试 Coze API 的流式响应功能。
 
@@ -45,9 +49,13 @@
 - 💾 一键下载生成的表情
 - 🏷️ 丰富的情绪标签选择
 
-## 在线使用
+## 技术栈
 
-访问：[肥猫表情包生成器](https://[你的GitHub用户名].github.io/fat-cat-meme-generator/)
+- HTML5
+- CSS3
+- JavaScript
+- SVG
+- Coze API
 
 ## 本地运行
 
@@ -67,14 +75,6 @@ python -m http.server 8000
 ```
 
 4. 在浏览器中访问 `http://localhost:8000`
-
-## 技术栈
-
-- HTML5
-- CSS3
-- JavaScript
-- SVG
-- Coze API
 
 ## 贡献
 
