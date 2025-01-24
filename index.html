@@ -335,16 +335,37 @@
                 downloadBtn.textContent = '下载中...';
                 downloadBtn.disabled = true;
 
-                // 获取图片数据
-                const response = await fetch(img.src);
-                if (!response.ok) throw new Error('下载失败');
-                const blob = await response.blob();
+                // 创建临时图片对象
+                const tempImg = new Image();
+                tempImg.crossOrigin = 'anonymous';
+                
+                // 等待图片加载完成
+                await new Promise((resolve, reject) => {
+                    tempImg.onload = resolve;
+                    tempImg.onerror = reject;
+                    tempImg.src = img.src;
+                });
+
+                // 创建 canvas
+                const canvas = document.createElement('canvas');
+                canvas.width = tempImg.width;
+                canvas.height = tempImg.height;
+                
+                // 在 canvas 上绘制图片
+                const ctx = canvas.getContext('2d');
+                ctx.drawImage(tempImg, 0, 0);
+                
+                // 将 canvas 转换为 blob
+                const blob = await new Promise(resolve => {
+                    canvas.toBlob(resolve, 'image/png');
+                });
 
                 // 创建下载链接
                 const url = URL.createObjectURL(blob);
                 const a = document.createElement('a');
                 a.href = url;
                 a.download = '肥猫表情包_' + new Date().getTime() + '.png';
+                a.style.display = 'none';
                 document.body.appendChild(a);
                 a.click();
                 document.body.removeChild(a);
