@@ -321,23 +321,45 @@
         });
 
         // 下载图片函数
-        function downloadImage() {
+        async function downloadImage() {
             const img = document.getElementById('imagePreview');
             if (!img.src || !img.complete) {
                 alert('请等待图片加载完成');
                 return;
             }
 
-            // 创建临时链接
-            const a = document.createElement('a');
-            a.href = img.src;
-            a.download = '肥猫表情包_' + new Date().getTime() + '.png';
-            a.target = '_blank';
-            
-            // 模拟点击下载
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
+            try {
+                // 显示下载中状态
+                const downloadBtn = document.getElementById('downloadBtn');
+                const originalText = downloadBtn.textContent;
+                downloadBtn.textContent = '下载中...';
+                downloadBtn.disabled = true;
+
+                // 获取图片数据
+                const response = await fetch(img.src);
+                if (!response.ok) throw new Error('下载失败');
+                const blob = await response.blob();
+
+                // 创建下载链接
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = '肥猫表情包_' + new Date().getTime() + '.png';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+
+                // 恢复按钮状态
+                downloadBtn.textContent = originalText;
+                downloadBtn.disabled = false;
+            } catch (error) {
+                console.error('下载失败:', error);
+                alert('下载失败，请重试');
+                const downloadBtn = document.getElementById('downloadBtn');
+                downloadBtn.textContent = '下载表情包';
+                downloadBtn.disabled = false;
+            }
         }
 
         // 预览图片
