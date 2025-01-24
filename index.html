@@ -321,42 +321,28 @@
         });
 
         // 下载图片函数
-        async function downloadImage() {
+        function downloadImage() {
             const img = document.getElementById('imagePreview');
-            if (!img.src) return;
-            
-            try {
-                // 创建一个 canvas 元素
-                const canvas = document.createElement('canvas');
-                const ctx = canvas.getContext('2d');
-                
-                // 设置 canvas 大小为图片大小
-                canvas.width = img.naturalWidth;
-                canvas.height = img.naturalHeight;
-                
-                // 在 canvas 上绘制图片
-                ctx.drawImage(img, 0, 0);
-                
-                // 将 canvas 转换为 blob
-                canvas.toBlob(function(blob) {
-                    // 创建下载链接
-                    const url = URL.createObjectURL(blob);
-                    const a = document.createElement('a');
-                    a.href = url;
-                    a.download = '肥猫表情包_' + new Date().getTime() + '.png';
-                    document.body.appendChild(a);
-                    a.click();
-                    document.body.removeChild(a);
-                    URL.revokeObjectURL(url);
-                }, 'image/png');
-            } catch (error) {
-                console.error('下载失败:', error);
-                alert('下载失败，请重试');
+            if (!img.src || !img.complete) {
+                alert('请等待图片加载完成');
+                return;
             }
+
+            // 创建临时链接
+            const a = document.createElement('a');
+            a.href = img.src;
+            a.download = '肥猫表情包_' + new Date().getTime() + '.png';
+            a.target = '_blank';
+            
+            // 模拟点击下载
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
         }
 
         // 预览图片
         function previewImage(src) {
+            if (!src) return;
             window.open(src, '_blank');
         }
 
@@ -365,6 +351,7 @@
             const button = document.getElementById('generateBtn');
             const input = document.getElementById('messageInput');
             const downloadBtn = document.getElementById('downloadBtn');
+            const imagePreview = document.getElementById('imagePreview');
             
             button.disabled = true;
             input.disabled = true;
@@ -374,15 +361,17 @@
             
             button.disabled = false;
             input.disabled = false;
-            if (document.getElementById('imagePreview').style.display === 'block') {
+            
+            // 确保图片显示后才显示下载按钮
+            if (imagePreview.style.display === 'block' && imagePreview.src) {
                 downloadBtn.style.display = 'inline-block';
             }
         }
 
-        // 等待图片加载完成后再显示下载按钮
+        // 监听图片加载完成事件
         document.getElementById('imagePreview').addEventListener('load', function() {
             const downloadBtn = document.getElementById('downloadBtn');
-            if (this.style.display === 'block') {
+            if (this.style.display === 'block' && this.src) {
                 downloadBtn.style.display = 'inline-block';
             }
         });
