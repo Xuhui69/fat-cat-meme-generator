@@ -320,6 +320,46 @@
             }
         });
 
+        // 下载图片函数
+        async function downloadImage() {
+            const img = document.getElementById('imagePreview');
+            if (!img.src) return;
+            
+            try {
+                // 创建一个 canvas 元素
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+                
+                // 设置 canvas 大小为图片大小
+                canvas.width = img.naturalWidth;
+                canvas.height = img.naturalHeight;
+                
+                // 在 canvas 上绘制图片
+                ctx.drawImage(img, 0, 0);
+                
+                // 将 canvas 转换为 blob
+                canvas.toBlob(function(blob) {
+                    // 创建下载链接
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = '肥猫表情包_' + new Date().getTime() + '.png';
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                    URL.revokeObjectURL(url);
+                }, 'image/png');
+            } catch (error) {
+                console.error('下载失败:', error);
+                alert('下载失败，请重试');
+            }
+        }
+
+        // 预览图片
+        function previewImage(src) {
+            window.open(src, '_blank');
+        }
+
         const originalSendMessage = sendMessage;
         sendMessage = async function() {
             const button = document.getElementById('generateBtn');
@@ -338,6 +378,14 @@
                 downloadBtn.style.display = 'inline-block';
             }
         }
+
+        // 等待图片加载完成后再显示下载按钮
+        document.getElementById('imagePreview').addEventListener('load', function() {
+            const downloadBtn = document.getElementById('downloadBtn');
+            if (this.style.display === 'block') {
+                downloadBtn.style.display = 'inline-block';
+            }
+        });
     </script>
 </body>
 </html>
