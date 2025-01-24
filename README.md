@@ -41,6 +41,10 @@ git push -u origin master# Coze API 测试工具
 
 一个简单易用的在线表情包生成工具，采用苹果风格设计。
 
+## 在线使用
+
+访问：[肥猫表情包生成器](https://xuhui69.github.io/fat-cat-meme-generator/)
+
 ## 功能特点
 
 - 🎨 简约现代的界面设计
@@ -61,7 +65,7 @@ git push -u origin master# Coze API 测试工具
 
 1. 克隆项目
 ```bash
-git clone https://github.com/[你的GitHub用户名]/fat-cat-meme-generator.git
+git clone https://github.com/Xuhui69/fat-cat-meme-generator.git
 ```
 
 2. 打开项目文件夹
